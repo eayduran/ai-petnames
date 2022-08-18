@@ -9,19 +9,21 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   async function getNames(event) {
-    setLoading(true)
-    event.preventDefault();
-    const response = await fetch("/api/hello", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ animal: animalInput }),
-    });
-    const data = await response.json();
-    setResult(data.result);
-    setAnimalInput("");
-    setLoading(false)
+    if(animalInput!==""){
+      setLoading(true)
+      event.preventDefault();
+      const response = await fetch("/api/hello", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ animal: animalInput }),
+      });
+      const data = await response.json();
+      setResult(data.result);
+      setAnimalInput("");
+      setLoading(false)
+    }
   }
 
 
@@ -49,9 +51,9 @@ export default function Home() {
           />
         </div>
 
-        <div className="py-3 rounded-md text-center text-white w-80 bg-green-700 mb-10" onClick={getNames}>
+        <div style={{backgroundColor: loading?'gray':null, cursor: loading?'not-allowed':null, }} className="hover:cursor-pointer py-3 rounded-md text-center text-white w-80 bg-green-700 mb-10 flex items-center justify-center" onClick={getNames}>
           {loading?
-            <Image className="animate-spin" src={Loadingsvg} height={20} width={20} alt="loading"/>
+            <Image className="animate-spin" src={Loadingsvg} height={24} width={24} alt="loading"/>
           :
           <div>
             Generate names
