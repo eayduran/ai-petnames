@@ -1,12 +1,15 @@
 import Head from "next/head";
 import { useState } from "react";
 import Image from "next/image";
+import Loadingsvg from "../public/loading.svg";
 
 export default function Home() {
   const [animalInput, setAnimalInput] = useState("");
   const [result, setResult] = useState();
+  const [loading, setLoading] = useState(false);
 
   async function getNames(event) {
+    setLoading(true)
     event.preventDefault();
     const response = await fetch("/api/hello", {
       method: "POST",
@@ -18,6 +21,7 @@ export default function Home() {
     const data = await response.json();
     setResult(data.result);
     setAnimalInput("");
+    setLoading(false)
   }
 
 
@@ -44,7 +48,17 @@ export default function Home() {
             onChange={(e) => setAnimalInput(e.target.value)}
           />
         </div>
-        <div className="py-3 rounded-md text-center text-white w-80 bg-green-700 mb-10" onClick={getNames}>Generate names</div>
+
+        <div className="py-3 rounded-md text-center text-white w-80 bg-green-700 mb-10" onClick={getNames}>
+          {loading?
+            <Image className="animate-spin" src={Loadingsvg} height={20} width={20} alt="loading"/>
+          :
+          <div>
+            Generate names
+          </div>
+          }
+        </div>
+
         <div>{result}</div>
       </div>
 
